@@ -621,8 +621,12 @@ module.exports = class cryptopia extends Exchange {
                     status = 'closed';
                 }
             }
-            if (!id && ('FilledOrders' in response['Data'])) {
-                id = response['Data']['FilledOrders'].toString ();
+            if (
+                !id &&
+                'FilledOrders' in response['Data'] &&
+                response['Data']['FilledOrders'].length > 0
+            ) {
+                id = response['Data']['FilledOrders'][0].toString ();
             }
         }
         let order = {

@@ -209,6 +209,7 @@ module.exports = class bittrex extends Exchange {
             if ((active !== 'false') || active) {
                 active = true;
             }
+            const minCost = (quote === 'BTC') ? 0.0005 : undefined;
             result.push ({
                 'id': id,
                 'symbol': symbol,
@@ -226,6 +227,10 @@ module.exports = class bittrex extends Exchange {
                     },
                     'price': {
                         'min': Math.pow (10, -precision['price']),
+                        'max': undefined,
+                    },
+                    'cost': {
+                        'min': minCost,
                         'max': undefined,
                     },
                 },

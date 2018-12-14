@@ -225,6 +225,10 @@ module.exports = class huobipro extends Exchange {
         if (numMarkets < 1)
             throw new ExchangeError (this.id + ' publicGetCommonSymbols returned empty response: ' + this.json (markets));
         let result = [];
+        const limitAmountExceptions = {
+            'BCH/BTC': 0.001,
+            'ETH/BTC': 0.001,
+        };
         for (let i = 0; i < markets.length; i++) {
             let market = markets[i];
             let baseId = market['base-currency'];
@@ -241,6 +245,10 @@ module.exports = class huobipro extends Exchange {
             };
             let maker = (base === 'OMG') ? 0 : 0.2 / 100;
             let taker = (base === 'OMG') ? 0 : 0.2 / 100;
+            let limitMinAmount = Math.pow (10, -precision['amount']);
+            limitMinAmount = (limitAmountExceptions[symbol] && limitMinAmount < limitAmountExceptions[symbol])
+                ? limitAmountExceptions[symbol]
+                : limitMinAmount;
             result.push ({
                 'id': id,
                 'symbol': symbol,
@@ -254,7 +262,7 @@ module.exports = class huobipro extends Exchange {
                 'maker': maker,
                 'limits': {
                     'amount': {
-                        'min': Math.pow (10, -precision['amount']),
+                        'min': limitMinAmount,
                         'max': Math.pow (10, precision['amount']),
                     },
                     'price': {

@@ -709,11 +709,12 @@ module.exports = class Exchange {
             }
             return this.markets
         }
-        const markets = await this.fetchMarkets (params)
-        let currencies = undefined
+        const promises = [this.fetchMarkets (params)];
+        let currenciesPromise = undefined
         if (this.has.fetchCurrencies) {
-            currencies = await this.fetchCurrencies ()
+            promises.push (this.fetchCurrencies ())
         }
+        const [markets, currencies] = await Promise.all (promises);
         return this.setMarkets (markets, currencies)
     }
 

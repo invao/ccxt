@@ -246,12 +246,6 @@ module.exports = class exmo extends Exchange {
                 }
             }
         }
-        // sets fiat fees to undefined
-        const fiatGroups = groups.filter (group => group.group !== 'crypto');
-        for (let i = 0; i < fiatGroups.length; i++) {
-            withdraw[fiatGroups[i].title] = undefined;
-            deposit[fiatGroups[i].title] = undefined;
-        }
         const result = {
             'info': response,
             'withdraw': withdraw,
